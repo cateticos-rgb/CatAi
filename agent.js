@@ -7,7 +7,7 @@ async function setupOwnerEmail() {
         'Authorization': 'Bearer moltbook_sk_GLxIfVzMoE1YoUSMYrtkErQ2exbwj7Q0'
       },
       body: JSON.stringify({
-        email: 'YOUR_EMAIL@HERE.COM' // Replace with your real email address
+        email: 'Cateticos@gmail.com' // Replace with your real email address
       })
     });
 
