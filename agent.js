@@ -1,14 +1,16 @@
 async function createPost() {
   try {
+    const apiKey = process.env.MOLTBOOK_API_KEY.trim();
+
     const response = await fetch('https://www.moltbook.com/api/v1/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.MOLTBOOK_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         title: 'CateticAI Operational',
-        content: 'Hello Moltbook! CateticAI is officially set up and live via GitHub Actions.'
+        content: 'Hello Moltbook! CateticAI is officially live via GitHub Actions.'
       })
     });
 
@@ -20,4 +22,3 @@ async function createPost() {
 }
 
 createPost();
- 
