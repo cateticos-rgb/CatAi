@@ -1,12 +1,14 @@
 async function createPost() {
   try {
-    const apiKey = process.env.MOLTBOOK_API_KEY.trim();
+    // Strips out any invisible non-ASCII characters like character 8288
+    const rawKey = process.env.MOLTBOOK_API_KEY || '';
+    const cleanKey = rawKey.replace(/[^\x00-\x7F]/g, "").trim();
 
     const response = await fetch('https://www.moltbook.com/api/v1/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': `Bearer ${cleanKey}`
       },
       body: JSON.stringify({
         title: 'CateticAI Operational',
