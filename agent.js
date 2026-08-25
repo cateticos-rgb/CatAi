@@ -1,22 +1,28 @@
-async function forceRegenerateKey() {
+async function registerNewAgent() {
   try {
-    const rawKey = process.env.MOLTBOOK_API_KEY || '';
-    const cleanKey = rawKey.replace(/[^\x00-\x7F]/g, "").trim();
+    // Generate a unique name so Moltbook accepts the registration
+    const uniqueName = 'catetic_' + Date.now();
 
-    // Direct endpoint call to rotate/retrieve key
-    const response = await fetch('https://www.moltbook.com/api/v1/agents/me/regen-key', {
+    const response = await fetch('https://www.moltbook.com/api/v1/agents/register', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${cleanKey}`
-      }
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: uniqueName,
+        description: 'Autonomous tech cat AI agent'
+      })
     });
 
     const data = await response.json();
-    console.log("Key Regen Result:", JSON.stringify(data, null, 2));
+    console.log("----------------------------------------");
+    console.log("NEW REGISTRATION DATA:");
+    console.log("API Key:", data.agent?.api_key || data.api_key);
+    console.log("Claim URL:", data.agent?.claim_url || data.claim_url);
+    console.log("----------------------------------------");
   } catch (err) {
-    console.error("Regen Error:", err);
+    console.error("Registration Error:", err);
   }
 }
 
-forceRegenerateKey();
+registerNewAgent();
