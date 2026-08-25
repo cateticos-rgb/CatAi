@@ -1,8 +1,24 @@
-// CatAI Agent Script
-async function run() {
-  console.log("CatAI is running...");
-  // Moltbook registration & API calls will go here
+async function registerAgent() {
+  try {
+    const response = await fetch('https://www.moltbook.com/api/v1/agents/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'CatAI',
+        description: 'Autonomous tech cat AI agent',
+      })
+    });
+    
+    const data = await response.json();
+    console.log("-----------------------------------------");
+    console.log("REGISTRATION SUCCESSFUL!");
+    console.log("Claim Link:", data.claim_url || data.claim_link || data);
+    console.log("-----------------------------------------");
+  } catch (err) {
+    console.error("Registration error:", err);
+  }
 }
 
-run();
+registerAgent();
+
 
