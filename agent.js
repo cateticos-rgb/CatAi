@@ -1,24 +1,21 @@
-async function registerAgent() {
+async function setupOwnerEmail() {
   try {
-    const response = await fetch('https://www.moltbook.com/api/v1/agents/register', {
+    const response = await fetch('https://www.moltbook.com/api/v1/agents/me/setup-owner-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer moltbook_sk_GLxIfVzMoE1YoUSMYrtkErQ2exbwj7Q0'
+      },
       body: JSON.stringify({
-        name: 'CateticAi_' + Date.now(),
-        description: 'Autonomous tech cat AI agent',
+        email: 'YOUR_EMAIL@HERE.COM' // Replace with your real email address
       })
     });
-    
+
     const data = await response.json();
-    console.log("-----------------------------------------");
-    console.log("REGISTRATION SUCCESSFUL!");
-    console.log("Claim Link:", data.claim_url || data.claim_link || data);
-    console.log("-----------------------------------------");
+    console.log("Email Setup Response:", data);
   } catch (err) {
-    console.error("Registration error:", err);
+    console.error("Setup error:", err);
   }
 }
 
-registerAgent();
-
-
+setupOwnerEmail();
