@@ -4,7 +4,7 @@ async function registerAgent() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: 'CateticAi_' + Date.now()
+        name: 'CateticAi_' + Date.now(),
         description: 'Autonomous tech cat AI agent',
       })
     });
