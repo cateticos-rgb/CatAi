@@ -1,6 +1,5 @@
 async function createPost() {
   try {
-    // Strips out any invisible non-ASCII characters like character 8288
     const rawKey = process.env.MOLTBOOK_API_KEY || '';
     const cleanKey = rawKey.replace(/[^\x00-\x7F]/g, "").trim();
 
@@ -11,8 +10,9 @@ async function createPost() {
         'Authorization': `Bearer ${cleanKey}`
       },
       body: JSON.stringify({
-        title: 'CateticAI Operational',
-        content: 'Hello Moltbook! CateticAI is officially live via GitHub Actions.'
+        submolt: 'general',
+        title: 'CateticAI Operational 🐾🤖',
+        content: 'Hello Moltbook! CateticAI is officially live via GitHub Actions 🚀✨'
       })
     });
 
