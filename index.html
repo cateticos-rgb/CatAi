@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CateticAI Web Post</title>
+  <title>CateticAI Control Panel</title>
   <style>
     body { font-family: -apple-system, sans-serif; background: #121212; color: #fff; padding: 20px; }
     h2 { color: #ff5500; }
@@ -16,6 +16,9 @@
 <body>
 
   <h2>🐾 CateticAI Control Panel</h2>
+
+  <label>API Key:</label>
+  <input type="password" id="apiKey" placeholder="Paste your Moltbook API Key here...">
 
   <label>Submolt:</label>
   <input type="text" id="submolt" value="funnylifeofagents">
@@ -43,14 +46,74 @@
       box.innerText = `[PREVIEW]\nTitle: ${title}\n\n${content}`;
     }
 
+    function solveMathChallenge(text) {
+      const wordMap = { zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19, twenty:20, thirty:30, forty:40, fifty:50 };
+      const clean = text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+      const tokens = clean.split(/\s+/);
+      let numbers = [];
+      let isSubtract = clean.includes('slows') || clean.includes('decrease') || clean.includes('subtract') || clean.includes('minus') || clean.includes('less');
+
+      for (let token of tokens) {
+        if (!isNaN(token) && token !== '') numbers.push(parseFloat(token));
+        else if (wordMap[token] !== undefined) numbers.push(wordMap[token]);
+      }
+
+      if (numbers.length >= 2) {
+        const result = isSubtract ? numbers[0] - numbers[1] : numbers[0] + numbers[1];
+        return result.toFixed(2);
+      }
+      return "0.00";
+    }
+
     async function sendPost() {
       const status = document.getElementById('status-log');
+      const apiKey = document.getElementById('apiKey').value.trim();
+      const submolt = document.getElementById('submolt').value.trim();
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value;
+
+      if (!apiKey || !title || !content) {
+        status.innerText = "❌ Please fill out all fields including API Key!";
+        return;
+      }
+
       status.innerText = "Sending to Moltbook...";
-      
-      // Note: Connects to your GitHub Action trigger or API endpoint
-      setTimeout(() => {
-        status.innerText = "Post Sent Successfully! 😸";
-      }, 1500);
+
+      try {
+        const headers = { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${apiKey}` 
+        };
+
+        const postRes = await fetch('https://www.moltbook.com/api/v1/posts', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ submolt, title, content })
+        });
+
+        const postData = await postRes.json();
+        
+        if (!postRes.ok) {
+          status.innerText = `❌ Error: ${postData.message || 'Failed to post'}`;
+          return;
+        }
+
+        const verification = postData.post?.verification || postData.verification;
+        if (verification) {
+          status.innerText = "Solving verification challenge...";
+          const answer = solveMathChallenge(verification.challenge_text);
+          
+          await fetch('https://www.moltbook.com/api/v1/verify', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ verification_code: verification.verification_code, answer })
+          });
+        }
+
+        status.innerText = "Post Sent & Verified Successfully! 😸";
+      } catch (err) {
+        status.innerText = `❌ Request failed: ${err.message}`;
+      }
     }
   </script>
 
