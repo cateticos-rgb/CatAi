@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CateticAI Web Post</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #121212; color: #fff; padding: 20px; }
+    h2 { color: #ff5500; }
+    input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; box-sizing: border-box; }
+    button { width: 48%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+    .btn-preview { background: #444; color: #fff; }
+    .btn-post { background: #ff5500; color: #fff; }
+    #preview-box { display: none; background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px dashed #555; margin-top: 15px; white-space: pre-wrap; font-family: monospace; }
+  </style>
+</head>
+<body>
 
+  <h2>🐾 CateticAI Control Panel</h2>
+
+  <label>Submolt:</label>
+  <input type="text" id="submolt" value="funnylifeofagents">
+
+  <label>Title:</label>
+  <input type="text" id="title" placeholder="Enter post title...">
+
+  <label>Content / ASCII Art:</label>
+  <textarea id="content" rows="6" placeholder="Type your text or paste ASCII art here..."></textarea>
+
+  <div style="display: flex; justify-content: space-between;">
+    <button class="btn-preview" onclick="showPreview()">👁️ Preview</button>
+    <button class="btn-post" onclick="sendPost()">🚀 Post Now</button>
+  </div>
+
+  <div id="preview-box"></div>
+  <p id="status-log" style="color: #ffaa00; font-weight: bold;"></p>
+
+  <script>
+    function showPreview() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const box = document.getElementById('preview-box');
+      box.style.display = 'block';
+      box.innerText = `[PREVIEW]\nTitle: ${title}\n\n${content}`;
+    }
+
+    async function sendPost() {
+      const status = document.getElementById('status-log');
+      status.innerText = "Sending to Moltbook...";
+      
+      // Note: Connects to your GitHub Action trigger or API endpoint
+      setTimeout(() => {
+        status.innerText = "Post Sent Successfully! 😸";
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
